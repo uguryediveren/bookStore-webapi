@@ -1,5 +1,7 @@
 using System;
+using System.Buffers;
 using System.Linq;
+using AutoMapper;
 
 namespace WebApi
 {
@@ -7,10 +9,15 @@ namespace WebApi
     {
 
         private readonly BookStoreDbContext _dbContext;
+        public BookDetailViewModel Model { get; set; }
+        private readonly IMapper _mapper;
         public int BookId { get; set; }
-        public GetBookDetailQuery(BookStoreDbContext dbContext)
+
+
+        public GetBookDetailQuery(BookStoreDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
 
@@ -21,12 +28,14 @@ namespace WebApi
             if (book is null)
                 throw new InvalidOperationException("İlgili kitap veritabanında bulunamadı!");
 
-            BookDetailViewModel viewModel = new BookDetailViewModel();
-            viewModel.Title = book.Title;
-            viewModel.PageCount = book.PageCount;
-            viewModel.GenreId = ((GenreEnum)book.GenreId).ToString();
-            viewModel.PublishDate = book.PublishDate.Date.ToString("dd/MM/yyyy");
 
+
+            var viewModel = _mapper.Map<BookDetailViewModel>(book);//new BookDetailViewModel();
+            // viewModel.Title = book.Title;
+            // viewModel.PageCount = book.PageCount;
+            // viewModel.Genre = ((GenreEnum)book.GenreId).ToString();
+            // viewModel.PublishDate = book.PublishDate.Date.ToString("dd/MM/yyyy");
+            System.Console.WriteLine(((GenreEnum)book.GenreId).ToString());
             return viewModel;
 
 
@@ -38,7 +47,7 @@ namespace WebApi
     public class BookDetailViewModel
     {
         public string Title { get; set; }
-        public string GenreId { get; set; }
+        public string Genre { get; set; }
         public int PageCount { get; set; }
         public string PublishDate { get; set; }
 

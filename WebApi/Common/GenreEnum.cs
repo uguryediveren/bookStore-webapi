@@ -4,6 +4,7 @@ namespace WebApi
     {
         PersonalGrowth = 1,
         ScienceFiction,
-        Noval
+        Novel
     }
 }
+
