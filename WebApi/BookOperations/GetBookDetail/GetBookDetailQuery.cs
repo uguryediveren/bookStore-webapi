@@ -35,7 +35,8 @@ namespace WebApi
             // viewModel.PageCount = book.PageCount;
             // viewModel.Genre = ((GenreEnum)book.GenreId).ToString();
             // viewModel.PublishDate = book.PublishDate.Date.ToString("dd/MM/yyyy");
-            System.Console.WriteLine(((GenreEnum)book.GenreId).ToString());
+         
+
             return viewModel;
 
 
