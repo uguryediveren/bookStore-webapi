@@ -1,8 +1,8 @@
 namespace WebApi
 {
-    public class ConsoleLogger : IloggerService
+    public class ConsoleLogger : ILoggerService
     {
-        public void IWrite(string message)
+        public void Write(string message)
         {
             System.Console.WriteLine(" [ConsoleLogger] - " + message);
         }

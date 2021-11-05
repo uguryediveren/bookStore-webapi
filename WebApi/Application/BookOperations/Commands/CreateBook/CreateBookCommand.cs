@@ -1,16 +1,6 @@
 using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Permissions;
-using System.Security.Principal;
-using System.Threading.Tasks.Dataflow;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using WebApi;
 
 namespace WebApi
 {

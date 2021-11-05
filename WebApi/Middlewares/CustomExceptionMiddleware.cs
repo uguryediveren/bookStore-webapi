@@ -15,9 +15,11 @@ namespace WebApi
     public class CustomExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        public CustomExceptionMiddleware(RequestDelegate next)
+        private readonly ILoggerService _logger;
+        public CustomExceptionMiddleware(RequestDelegate next, ILoggerService logger)
         {
             _next = next;
+            _logger = logger;
         }
         float minElapsedTime = 100.00f;
         public async Task Invoke(HttpContext context)
@@ -26,7 +28,7 @@ namespace WebApi
             try
             {
                 string message = "[Request]  HTTP " + context.Request.Method + " - " + context.Request.Path;
-                System.Console.WriteLine(message);
+                _logger.Write(message);
                 await _next(context);
                 watch.Stop();
                 if (watch.Elapsed.TotalMilliseconds < minElapsedTime)
@@ -34,16 +36,13 @@ namespace WebApi
                     minElapsedTime = (float)watch.Elapsed.TotalMilliseconds;
                 }
                 message = "[Response] HTTP " + context.Request.Method + " - " + context.Request.Path + " responded " + context.Response.StatusCode + " in " + watch.Elapsed.TotalMilliseconds + " ms " + " - " + "Alınan en kısa response süresi " + minElapsedTime + "ms";
-                System.Console.WriteLine(message);
+                _logger.Write(message);
             }
             catch (Exception ex)
             {
                 watch.Stop();
                 await HandleException(context, ex, watch);
-
             }
-
-
         }
 
         private Task HandleException(HttpContext context, Exception ex, Stopwatch watch)
@@ -51,7 +50,7 @@ namespace WebApi
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
             string message = "[Error]    HTTP " + context.Request.Method + " - " + context.Response.StatusCode + " Error Message " + ex.Message + " in " + watch.Elapsed.TotalMilliseconds + " ms";
-            System.Console.WriteLine(message);
+            _logger.Write(message);
 
 
             var result = JsonConvert.SerializeObject(new { error = ex.Message }, Formatting.None);

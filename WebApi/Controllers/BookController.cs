@@ -3,7 +3,6 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace WebApi
 {
 
@@ -75,6 +74,7 @@ namespace WebApi
             validator.ValidateAndThrow(command);
             command.Handle();
             return Ok();
+
         }
 
     }

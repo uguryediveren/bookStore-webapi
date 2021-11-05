@@ -10,7 +10,7 @@ using System.Security.Principal;
 using System.Threading.Tasks.Dataflow;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using WebApi;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi
 {
@@ -27,8 +27,9 @@ namespace WebApi
 
         public List<BooksViewModel> Handle()
         {
-            var bookList = _dbContext.Books.OrderBy(x => x.Id).ToList();
-            List<BooksViewModel> vm = _mapper.Map<List<BooksViewModel>>(bookList);//new List<BooksViewModel>();
+            var bookList = _dbContext.Books.Include(x => x.Genre).Include(x => x.Author).OrderBy(x => x.Id).ToList();
+            List<BooksViewModel> vm = _mapper.Map<List<BooksViewModel>>(bookList);
+            //new List<BooksViewModel>();
             // foreach (var book in bookList)
             // {
             //     vm.Add(new BooksViewModel()
@@ -46,10 +47,13 @@ namespace WebApi
 
     public class BooksViewModel
     {
+        public int id { get; set; }
         public string Title { get; set; }
         public int PageCount { get; set; }
         public string PublishDate { get; set; }
         public string Genre { get; set; }
+        public string AuthorName { get; set; }
+        public string AuthorSurname { get; set; }
 
 
     }
